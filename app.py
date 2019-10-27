@@ -4,7 +4,7 @@ from elasticsearch import Elasticsearch, helpers
 from dialogue_system.manager import DialogueManager
 from dialogue_system.queries.text_based import TextQuery
 
-with open('../data/shops.json', 'r') as f:
+with open('data/shops.json', 'r') as f:
     data = json.load(f)
 
 es = Elasticsearch()
@@ -17,7 +17,6 @@ _ = helpers.bulk(es, data, index='shop-index', doc_type='shop-events')
 print('Index is built')
 
 app = Flask(__name__)
-
 
 @app.route('/send_text', methods=['POST'])
 def send_text():

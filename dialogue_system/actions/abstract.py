@@ -37,7 +37,7 @@ class DummyHelloAction(AbstractAction):
         # TODO
 
     def reply(self, slots: Dict[Slot, str], user_id=None) -> SingleTextResponse:
-        yield SingleTextResponse(is_finished=True, is_successful=True, text='hello, dear guest and welcome to the Stuttgart airport!')
+        yield SingleTextResponse(is_finished=True, is_successful=True, text='hello, dear guest and welcome to the Stuttgart airport')
 
 
 class DummyYouKnowWhoIsPushkin(AbstractAction):
