@@ -18,13 +18,11 @@ print('Index is built')
 
 app = Flask(__name__)
 
+
 @app.route('/send_text', methods=['POST'])
 def send_text():
-    print(request.data.decode())
-
-    text_query = TextQuery(request.data.decode())
+    text_query = TextQuery(request.get_json(force=True)['text'])
     dm_response = dm.reply(user_one, text_query).to_key_value_format()
-    print(dm_response)
 
     return jsonify(dm_response)
 
