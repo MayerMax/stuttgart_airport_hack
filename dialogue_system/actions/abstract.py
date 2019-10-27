@@ -32,13 +32,12 @@ class DummyHelloAction(AbstractAction):
 
     @classmethod
     def activation_response(cls, initial_query: TextQuery, slots: Dict[Slot, str]) -> ActivationResponse:
-        if initial_query.lower() in ['привет', 'здорово', 'здравствуйте', 'хай']:
+        if initial_query.lower() in ['hello', 'hi', 'welcome', 'wow']:
             return ActivationResponse(intent_detected=True)
         # TODO
 
     def reply(self, slots: Dict[Slot, str], user_id=None) -> SingleTextResponse:
-        yield SingleTextResponse(is_finished=True, is_successful=True, text='Привет! Я виртуалньый '
-                                                                            'помощник Наталья по Пушкинскому музею и готова тебе помочь в любой момент!')
+        yield SingleTextResponse(is_finished=True, is_successful=True, text='hello, dear guest and welcome to the Stuttgart airport!')
 
 
 class DummyYouKnowWhoIsPushkin(AbstractAction):

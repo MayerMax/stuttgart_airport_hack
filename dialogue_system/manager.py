@@ -136,7 +136,9 @@ class DialogueManager:
 if __name__ == '__main__':
     dm = DialogueManager()
     user_one, user_two = '1', '2'
-    print(dm.reply(user_one, TextQuery('about sbahn')))
-    print(dm.reply(user_one, TextQuery('rent a car')))
-    print(dm.reply(user_one, TextQuery('buy swarowski')))
-    print(dm.reply(user_one, TextQuery('find duty free')))
+    # print(dm.reply(user_one, TextQuery('about sbahn')))
+    # print(dm.reply(user_one, TextQuery('rent a car')))
+    # print(dm.reply(user_one, TextQuery('buy swarowski')))
+    # print(dm.reply(user_one, TextQuery('find duty free')))
+
+    print(dm.reply(user_one, TextQuery('fossil shop')))

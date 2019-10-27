@@ -18,14 +18,14 @@ class TagRecognizer(AbstractSlotRecognizer):
                 "match": {
                     "tags": {
                         "query": query.text,
-                        "fuzziness": "2"
+                        "fuzziness": "auto"
                     }
                 }
             }
         })['hits']['hits']
         if not output:
             return {}
-        output = [x for x in output if x['_score'] > 2.5]
+        output = [x for x in output if x['_score'] > 2.1]
         if not output:
             return {}
         return {Slot.SlotByTag: output}
