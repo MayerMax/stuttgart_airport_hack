@@ -1,15 +1,18 @@
-from typing import Dict, Union
+import random
+from typing import Dict
 
 from elasticsearch import Elasticsearch
 
-from dialogue_system.actions.abstract import AbstractAction, ActivationResponse
+from dialogue_system.actions.abstract import AbstractAction
 from dialogue_system.queries.text_based import TextQuery
-from dialogue_system.responses.image_based import SingleImageResponse
+from dialogue_system.responses.abstract import ActivationResponse
+from dialogue_system.responses.image_based import MultiImageBasedResponse, SingleImageResponse
 from dialogue_system.responses.text_based import SingleTextResponse
 from slots.slot import Slot
 
 
-class ObjectByTypeAction(AbstractAction):
+class RentACarAction(AbstractAction):
+    _TRIGGERS_ = ['rent', 'rental', 'rent a car', 'renting', 'car rental']
     recognized_types = [TextQuery]
 
     def __init__(self, user_id, props: dict, slots: Dict[Slot, str], es_params: dict = None):
@@ -18,24 +21,22 @@ class ObjectByTypeAction(AbstractAction):
 
     @classmethod
     def activation_response(cls, initial_query: TextQuery, slots: Dict[Slot, str]) -> ActivationResponse:
-        if Slot.ObjectType not in slots:
-            return None
-        return ActivationResponse(intent_detected=True)
+        for trigger in RentACarAction._TRIGGERS_:
+            if trigger in initial_query.text:
+                return ActivationResponse(intent_detected=True)
 
-    def reply(self, slots: Dict[Slot, str], user_id=None) -> Union[SingleTextResponse, SingleImageResponse]:
-        object_type = self._initial_slots[Slot.ObjectType]
-
+    def reply(self, slots: Dict[Slot, str], user_id=None) -> SingleTextResponse:
         output = self._es.search(index='shop-index', body={
             "query": {
                 "match": {
                     "type": {
-                        "query": object_type,
+                        "query": 'rentalcar',
                         "fuzziness": "2"
                     }
                 }
             }
-        })['hits']['hits'][0]['_source']
 
+        })['hits']['hits'][0]['_source']
         text = f'{output["name"]}, floor: {output["floor"]}, type: {output["type"]}'
 
         if output['image_url']:

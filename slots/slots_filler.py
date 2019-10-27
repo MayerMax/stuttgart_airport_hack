@@ -1,5 +1,6 @@
 from dialogue_system.queries.abstract import AbstractQuery
 from slots.recognizers.fuzzy_text_recognizer import FuzzyTextRecognizer
+from slots.recognizers.tag_recognizer import TagRecognizer
 from slots.slot import Slot
 
 
@@ -8,8 +9,7 @@ class SlotsFiller:
         self._available_recognizers = [
             FuzzyTextRecognizer(search_slot=Slot.ShopByName,
                                 min_threshold=4.5, index_name='shop-index'),
-            FuzzyTextRecognizer(search_slot=Slot.ObjectType,
-                                min_threshold=2.2, index_name='shop-index'),
+            TagRecognizer()
         ]
 
     def enrich(self, query: AbstractQuery, previous_slots=None):

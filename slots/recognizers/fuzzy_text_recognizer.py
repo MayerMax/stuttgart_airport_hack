@@ -10,7 +10,7 @@ class FuzzyTextRecognizer(AbstractSlotRecognizer):
     recognized_types = [TextQuery]
 
     def __init__(self, search_slot: Slot, additional_slots_to_get: typing.List[Slot] = None, min_threshold: float =2,
-                 elastic_params: dict = None, index_name: str = 'collection-index'):
+                 elastic_params: dict = None, index_name: str = 'shop-index'):
         if elastic_params:
             self._es = Elasticsearch(elastic_params)  # for deployment
         else:

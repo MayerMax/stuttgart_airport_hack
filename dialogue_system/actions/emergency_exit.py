@@ -8,12 +8,15 @@ from dialogue_system.responses.text_based import SingleTextResponse
 from slots.slot import Slot
 
 
-class DefaultAnswerAction(AbstractAction):
-    recognized_types = [TextQuery, ImageQuery]
+class EmergencyAction(AbstractAction):
+    _TRIGGERS_ = ['emergency exit', 'emergency']
+    recognized_types = [TextQuery]
 
     @classmethod
     def activation_response(cls, initial_query: TextQuery, slots: Dict[Slot, str]) -> ActivationResponse:
-        return ActivationResponse(intent_detected=True)
+        for trigger in EmergencyAction._TRIGGERS_:
+            if trigger in initial_query.text:
+                return ActivationResponse(intent_detected=True)
 
     def reply(self, slots: Dict[Slot, str], user_id=None) -> SingleTextResponse:
-        yield SingleTextResponse(is_finished=True, is_successful=True, text='Sorry, I did not get ya!')
+        yield SingleTextResponse(is_finished=True, is_successful=True, text='Emergency path is available, open AR and follow the guide')

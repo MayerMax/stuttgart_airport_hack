@@ -3,7 +3,10 @@ from collections import namedtuple
 
 from dialogue_system.actions.abstract import AbstractAction, DummyHelloAction
 from dialogue_system.actions.default_response_action import DefaultAnswerAction
-from dialogue_system.actions.object_by_type import ObjectByTypeAction
+from dialogue_system.actions.food import FindRestaurantAction
+from dialogue_system.actions.public_transport import PublicTransportAction
+from dialogue_system.actions.rental import RentACarAction
+from dialogue_system.actions.search_by_tag import SearchByTagAction
 from dialogue_system.actions.shop_by_name import ShopByNameAction
 from dialogue_system.queries.abstract import AbstractQuery
 from dialogue_system.queries.text_based import TextQuery
@@ -20,7 +23,11 @@ class ActiveUsersManager:
     max_retry_counts = {
         DummyHelloAction: 0,
         ShopByNameAction: 0,
-        ObjectByTypeAction: 0
+        FindRestaurantAction: 0,
+        SearchByTagAction: 0,
+        RentACarAction: 0,
+        PublicTransportAction: 0
+
     }
 
     def __init__(self):
@@ -68,7 +75,10 @@ class DialogueManager:
 
         self._actions_call_order = {DummyHelloAction: self.__dummy_hello_action,
                                     ShopByNameAction: self.__shop_by_name_action,
-                                    ObjectByTypeAction: self._object_by_type_action,
+                                    FindRestaurantAction: self.__find_restaurant_action,
+                                    SearchByTagAction: self.__search_by_tag_action,
+                                    RentACarAction: self._get_car_rental,
+                                    PublicTransportAction: self.__get_public_transport,
                                     DefaultAnswerAction: self._get_default_response}
 
     def reply(self, user_id: str, query: AbstractQuery) -> AbstractResponse:
@@ -103,8 +113,20 @@ class DialogueManager:
         return ShopByNameAction(user_id=user_id, props=props, slots=slots)
 
     @staticmethod
-    def _object_by_type_action(user_id, props: dict, slots: Dict[Slot, str]):
-        return ObjectByTypeAction(user_id=user_id, props=props, slots=slots)
+    def __find_restaurant_action(user_id, props: dict, slots: Dict[Slot, str]):
+        return FindRestaurantAction(user_id=user_id, props=props, slots=slots)
+
+    @staticmethod
+    def __search_by_tag_action(user_id, props: dict, slots: Dict[Slot, str]):
+        return SearchByTagAction(user_id=user_id, props=props, slots=slots)
+
+    @staticmethod
+    def _get_car_rental(user_id, props: dict, slots: Dict[Slot, str]):
+        return RentACarAction(user_id=user_id, props=props, slots=slots)
+
+    @staticmethod
+    def __get_public_transport(user_id, props: dict, slots: Dict[Slot, str]):
+        return PublicTransportAction(user_id=user_id, props=props, slots=slots)
 
     @staticmethod
     def _get_default_response(user_id, props: dict, slots: Dict[Slot, str]):
@@ -114,22 +136,7 @@ class DialogueManager:
 if __name__ == '__main__':
     dm = DialogueManager()
     user_one, user_two = '1', '2'
-    print(dm.reply(user_one, TextQuery('where i can find food')))
-    # print(dm.reply(user_one, TextQuery('расскажи про Успение Богоматери')))
-    # print(dm.reply(user_one, TextQuery('расскажи про девочку на шаре')))
-    # print(dm.reply(user_one, TextQuery('как попасть на выставку Русский Йорданс')))
-    # print(dm.reply(user_one, TextQuery('когда будет лекция про искусство древней греции')))
-
-    # print(dm.reply(user_one, TextQuery('как попасть в Искусство Древнего Египта?')))
-    # print(dm.reply(user_one, TextQuery('греческий дворик')))
-    # print(dm.reply(user_one, TextQuery('да')))
-
-    # print(dm.reply(user_one, TextQuery('хочу узнать про пабло пикассо')))
-
-    # print(dm.reply(user_one, TextQuery('хочу найти что-то из алибастра')))
-    # print(dm.reply(user_one, TextQuery('расскажи про пушкина')))
-    # print(dm.reply(user_one, TextQuery('как проехать до музея?')))
-    # print(dm.reply(user_one, TextQuery('красная площадь')))
-
-    # print(dm.reply(user_one, TextQuery('как звали жену Пушкина?')))
-    # print(dm.reply(user_two, TextQuery('расскажи про пушкина')))
+    print(dm.reply(user_one, TextQuery('about sbahn')))
+    print(dm.reply(user_one, TextQuery('rent a car')))
+    print(dm.reply(user_one, TextQuery('buy swarowski')))
+    print(dm.reply(user_one, TextQuery('find duty free')))
